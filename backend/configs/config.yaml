@@ -1,0 +1,20 @@
+database:
+  host: "localhost"
+  port: 5432
+  user: "postgres"
+  password: "password"
+  dbname: "user_profile"
+server:
+  port: 8080
+minio:
+  endpoint: "minio_docker:9000"
+  access_key: "minioadmin"
+  secret_key: "minioadmin"
+  bucket: "mybucket"
+  secure: false
+  use_ssl: false
+rabbit:
+  url: ""
+  queue_photo_name: ""
+  queue_tags_name: ""
+  queue_anket_name: ""
