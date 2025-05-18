@@ -1,10 +1,12 @@
 package main
 
 import (
+	"context"
 	"fmt"
 	"log/slog"
 	"net/http"
 	"strconv"
+	"time"
 
 	"github.com/kerilOvs/backend/internal/handlers"
 	"github.com/kerilOvs/backend/internal/models"
@@ -17,6 +19,7 @@ import (
 	"github.com/kerilOvs/backend/pkg/logger"
 
 	"github.com/kerilOvs/backend/internal/service"
+	"github.com/kerilOvs/backend/internal/storage/minio"
 	postgresstorage "github.com/kerilOvs/backend/internal/storage/postgres"
 )
 
@@ -52,8 +55,20 @@ func main() {
 		log.Error("Failed to migrate database:", slog.Any("error", err))
 	}
 
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	defer cancel()
+
+	log.Info("Connection to minio")
+	minioClient, err := minio.New(ctx, cfg.Minio)
+	if err != nil {
+		log.Error("Failed to initialize MinIO client:", slog.Any("error", err))
+	}
+
 	userStorage := postgresstorage.NewUserPostgresStorage(db)
 	userService := service.NewUserService(userStorage)
+
+	docService := service.NewDocService(minioClient, cfg.Minio.Bucket)
+	docHandler := handlers.NewDocHandler(userService, docService)
 
 	e := echo.New()
 	e.Use(handlers.Logging(log))
@@ -75,25 +90,25 @@ func main() {
 	}))
 
 	userHandler := handlers.NewUserHandler(userService)
-	registerRoutes(e, userHandler)
+	registerRoutes(e, userHandler, docHandler)
 
 	serverAddr := ":" + strconv.Itoa(cfg.Server.Port)
 	log.Info("Server started", slog.String("port", serverAddr))
 	log.Error("Server stopped", slog.Any("error", e.Start(serverAddr)))
 }
 
-func registerRoutes(e *echo.Echo, userHandler *handlers.UserHandler) {
+func registerRoutes(e *echo.Echo, userHandler *handlers.UserHandler, docHandler *handlers.DocHandler) {
 
 	e.POST("/users", userHandler.CreateUser)                     // +
-	e.DELETE("/users/:id", userHandler.DeleteUser)               // ?
+	e.DELETE("/users/:id", userHandler.DeleteUser)               // +
 	e.GET("/users/:id", userHandler.GetUserById)                 // +
 	e.PATCH("/users/:id/profile", userHandler.UpdateUserProfile) // +
 
 	e.GET("/users/:id/docs", userHandler.GetUserDocs) // +
 	//e.PUT("/users/:id/photos", userHandler.AddUserPhoto)
-	e.DELETE("/users/:id/docs/:docId", userHandler.RemoveUserDoc) // +
+	e.DELETE("/users/:id/docs/:docId", userHandler.RemoveUserDoc) //
 
 	// Фото маршруты
-	//e.POST("/users/:id/addphoto", photoHandler.UploadPhoto) // + по айди юзера добавляет фотку
-	//e.GET("/photos/:id", photoHandler.GetPhoto)             // + по айди !фото! отдает фотку
+	e.POST("/users/:id/addphoto", docHandler.UploadDoc) //  по айди юзера добавляет доку
+	e.GET("/photos/:id", docHandler.GetDoc)             //  по айди !doc! отдает доку
 }
