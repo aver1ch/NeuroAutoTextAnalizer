@@ -1,0 +1,88 @@
+version: '3.8'
+
+services:
+  # PostgreSQL сервис
+  postgres:
+    image: postgres:17
+    container_name: postgres2
+    environment:
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: user_profile
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    networks:
+      - app-network
+
+  # MinIO сервис
+  minio:
+    image: minio/minio
+    container_name: minio2
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    environment:
+      MINIO_ROOT_USER: minioadmin
+      MINIO_ROOT_PASSWORD: minioadmin
+    volumes:
+      - minio_data:/data
+      - /etc/localtime:/etc/localtime:ro
+
+    command: server /data --console-address ":9001"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:9000/minio/health/live"]
+      interval: 30s
+      timeout: 20s
+      retries: 3
+    networks:
+      - app-network
+
+  # MinIO клиент для настройки
+  mc:
+    image: minio/mc
+    depends_on:
+      - minio
+    entrypoint: >
+        /bin/sh -c "
+        sleep 5;
+        mc alias set local http://minio:9000 minioadmin minioadmin;
+        mc mb -p local/mybucket;
+        mc admin policy create local myfullpolicy /tmp/myfullpolicy.json;
+        mc admin user add local myuser mypassword;
+        mc admin policy attach local myfullpolicy --user myuser;
+        mc anonymous set download local/mybucket/pub;
+        exit 0;
+        "
+    volumes:
+      - ./myfullpolicy.json:/tmp/myfullpolicy.json
+    networks:
+      - app-network
+
+  # Ваш сервис personal-account
+  personal-account:
+    image: my-doc-service
+    container_name: backend
+    volumes:
+      - ./configs/config.yaml:/app/config.yaml:ro  # монтируем в ту же папку
+    command: /app/service -config /app/config.yaml  # обновлённый путь
+    depends_on:
+      - postgres
+      - minio
+    ports:
+      - "8080:8080"  # предполагаемый порт, уточните если нужно
+    networks:
+      - app-network
+
+volumes:
+  postgres_data:
+  minio_data:
+
+networks:
+  app-network:
+    driver: bridge

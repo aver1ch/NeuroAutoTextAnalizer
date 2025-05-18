@@ -21,11 +21,12 @@ type ServerConfig struct {
 }
 
 type MinioConfig struct {
-	Endpoint  string `yaml:"endpoint" env:"MINIO_ENDPOINT"`
-	AccessKey string `yaml:"access_key" env:"MINIO_ACCESS_KEY"`
-	SecretKey string `yaml:"secret_key" env:"MINIO_SECRET_KEY"`
-	Bucket    string `yaml:"bucket" env:"MINIO_BUCKET"`
-	UseSSL    bool   `yaml:"use_ssl" env:"MINIO_USE_SSL"`
+	Endpoint   string `yaml:"endpoint" env:"MINIO_ENDPOINT"`
+	PublicHost string `yaml:"public_host" env:"MINIO_PUBLIC_HOST"`
+	AccessKey  string `yaml:"access_key" env:"MINIO_ACCESS_KEY"`
+	SecretKey  string `yaml:"secret_key" env:"MINIO_SECRET_KEY"`
+	Bucket     string `yaml:"bucket" env:"MINIO_BUCKET"`
+	UseSSL     bool   `yaml:"use_ssl" env:"MINIO_USE_SSL"`
 }
 
 type RabbitConfig struct {

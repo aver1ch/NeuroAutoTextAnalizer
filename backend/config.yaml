@@ -8,7 +8,6 @@ server:
   port: 8080
 minio:
   endpoint: "minio2:9000"
-  public_host: "localhost:9000"
   access_key: "minioadmin"
   secret_key: "minioadmin"
   bucket: "mybucket"

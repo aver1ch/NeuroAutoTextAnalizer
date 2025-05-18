@@ -23,6 +23,9 @@ import (
 	postgresstorage "github.com/kerilOvs/backend/internal/storage/postgres"
 )
 
+// to do
+// добавить удаление документа
+
 func main() {
 	fmt.Println("Hi, i'm server:)")
 
@@ -109,6 +112,11 @@ func registerRoutes(e *echo.Echo, userHandler *handlers.UserHandler, docHandler 
 	e.DELETE("/users/:id/docs/:docId", userHandler.RemoveUserDoc) //
 
 	// Фото маршруты
-	e.POST("/users/:id/addphoto", docHandler.UploadDoc) //  по айди юзера добавляет доку
-	e.GET("/photos/:id", docHandler.GetDoc)             //  по айди !doc! отдает доку
+	e.POST("/users/:id/docs", docHandler.UploadDoc) //  по айди юзера добавляет доку
+	e.GET("/docs/:id", docHandler.GetDoc)           //  по айди !doc! отдает доку
 }
+
+// СОБРАТЬ ОБРАЗ
+// docker build -t my-doc-service .
+// ЗАПУСТИТЬ МИКРОСЕРВИСЫ
+// docker-compose up -d
