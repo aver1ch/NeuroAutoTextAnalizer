@@ -8,11 +8,10 @@
     user-select: none;
   }
   
-  /* Боковое меню по умолчанию скрыто слева */
   .sidebar {
     position: fixed;
-    top: 50px; /* под top-bar, если есть */
-    left: -240px; /* скрыто */
+    top: 50px;
+    left: -240px;
     width: 220px;
     height: calc(100vh - 50px);
     background: #f9f9f9;
@@ -25,22 +24,19 @@
     flex-direction: column;
   }
   
-  /* Когда меню открыто — сдвигаем вправо */
   .home-wrapper.sidebar-open .sidebar {
     left: 0;
   }
   
-  /* Смещение основного контента при открытом меню */
   .home-wrapper.sidebar-open .main-content {
     margin-left: 220px;
     transition: margin-left 0.3s ease;
   }
   
-  /* Основной контент занимает всю ширину, когда меню закрыто */
   .main-content {
     margin-left: 0;
     transition: margin-left 0.3s ease;
-    padding-top: 50px; /* если есть фиксированный top-bar */
+    padding-top: 50px;
     box-sizing: border-box;
     min-height: calc(100vh - 50px);
     background: #fff;
@@ -48,7 +44,6 @@
 
 .home-container {
     padding: 24px;
-    /*font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;*/
     font-family: 'Arial', sans-serif;
   }
   
@@ -116,7 +111,6 @@
     color: #000;
   }
   
-  /* Сайдбар слева */
   .sidebar {
     width: 220px;
     background: #f9f9f9;
