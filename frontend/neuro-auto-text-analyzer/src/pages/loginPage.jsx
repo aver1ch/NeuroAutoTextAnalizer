@@ -1,21 +1,54 @@
-import React from 'react';
-import './LoginPage.css'; // если будешь использовать внешний CSS
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import '../styles/stylesOfPages/LoginPage.css';
 
 const LoginPage = () => {
+  const [login, setLogin] = useState('');
+  const [password, setPassword] = useState('');
+  const [status, setStatus] = useState('');
+
+  const navigate = useNavigate();
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    if (login === 'admin' && password === '1234') {
+      localStorage.setItem('auth', 'true');
+      setStatus("Успешно!");
+      navigate('/');
+    } else if (login === '') {
+      setStatus("Введите логин")
+    } else if (password === '') {
+      setStatus("Введите пароль")
+    } else {
+      setStatus('Неверный логин или пароль');
+    }
+  };
+
   return (
-    <div className="login-container">
-      <h2 className="login-title">Вход</h2>
+    <form onSubmit={handleSubmit} className="login-form">
+      <p1 className="autorisation-text">Авторизация</p1>
+      
+      <input
+        type="text"
+        placeholder="Логин"
+        value={login}
+        onChange={e => setLogin(e.target.value)}
+        className="login-input"
+      />
+      <input
+        type="password"
+        placeholder="Пароль"
+        value={password}
+        onChange={e => setPassword(e.target.value)}
+        className="login-input"
+      />
+      <button type="submit" className="login-button">
+        Войти
+      </button>
 
-      <div className="form-group">
-        <label htmlFor="login">Логин:</label>
-        <input type="text" id="login" name="login" />
-      </div>
-
-      <div className="form-group">
-        <label htmlFor="password">Пароль:</label>
-        <input type="password" id="password" name="password" />
-      </div>
-    </div>
+      {status && <div className="status-message">{status}</div>}
+    </form>
   );
 };
 

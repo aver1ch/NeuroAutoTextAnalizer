@@ -1,0 +1,115 @@
+document:
+  general:
+    margins:
+      left: 20mm
+      right: 10mm
+      top: 20mm
+      bottom: 20mm
+    fonts:
+      main:
+        family: Times New Roman
+        size: 14pt
+      appendices:
+        family: Times New Roman
+        size: 12pt
+      notes:
+        family: Times New Roman
+        size: 12pt
+    spacing:
+      line: 1.5
+      exceptions:
+        - first_edition: single
+
+  structure:
+    title_page:
+      elements:
+        - agency_name: Федеральное агентство по техническому регулированию и метрологии
+        - logo_position: center
+        - standard_type: ГОСТ Р / ПНСТ
+        - designation: ГОСТ Р X.XXXX—XXXX
+        - title: Название стандарта
+        - status: Издание официальное / (проект)
+        - publisher_info: Москва, Стандартинформ, год
+      appendix: А
+
+    preface:
+      required: true
+      numbering: roman
+      content:
+        - development_info
+        - approval_info
+        - replacement_info
+        - patent_notice
+
+    content:
+      required: true
+      numbering: roman
+
+    sections:
+      hierarchy:
+        - section
+        - subsection
+        - paragraph
+        - subparagraph
+      numbering: arabic
+      references:
+        normative:
+          order:
+            - interstate_standards
+            - national_standards
+            - classifiers
+            - codes_of_practice
+        informative: bibliography
+
+    appendices:
+      labeling: 
+        mandatory: (обязательное)
+        optional: (рекомендуемое)
+      numbering: А, Б, В...
+
+  numbering:
+    pages:
+      main: arabic
+      special_pages:
+        - preface: roman
+        - content: roman
+        - introduction: roman
+      start_from: II (for special pages)
+    headers:
+      left: Национальный стандарт РФ
+      right: Обозначение стандарта (без международных кодов)
+
+  special_cases:
+    draft:
+      designation_suffix: "(проект)"
+      watermark: "Настоящий проект стандарта не подлежит применению до его утверждения"
+      first_page_label: Проект, [редакция]
+      spacing_exceptions: allowed
+
+    changes:
+      form: Приложение Е
+      elements:
+        - change_number
+        - approval_date
+        - implementation_date
+        - text_format
+
+  metadata:
+    UDC: обязателен
+    OKS: обязателен
+    keywords: перечисление через запятую
+    product_codes: ОКП / ОКУН (при наличии)
+
+  compliance:
+    replaces: ГОСТ Р 1.5—2004
+    based_on: 
+      - ГОСТ 1.5—2001
+      - ГОСТ Р 1.7—2008
+    exceptions: Патентные ограничения (при наличии)
+
+validation:
+  - check_margins
+  - check_font_sizes
+  - validate_numbering_sequence
+  - ensure_roman_for_special_pages
+  - verify_metadata_inclusion
