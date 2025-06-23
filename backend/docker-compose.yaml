@@ -78,6 +78,23 @@ services:
       - "8080:8080"  # предполагаемый порт, уточните если нужно
     networks:
       - app-network
+   
+   # Новый сервис для работы с DOCX
+  formatting-docx:
+    image: formatting-docx
+    container_name: formatting-docx
+    ports:
+      - "5000:5000"
+    volumes:
+      - /tmp/docx_temp:/tmp/docx_temp
+    environment:
+      FLASK_APP: main.py
+      FLASK_ENV: production
+      PYTHONPATH: /app
+      TEMP_DIR: /tmp/docx_temp
+    networks:
+      - app-network
+ 
 
 volumes:
   postgres_data:

@@ -37,6 +37,7 @@ func (h *DocHandler) UploadDoc(c echo.Context) error {
 	allowedExtensions := map[string]bool{
 		".doc":  true,
 		".docx": true,
+		".yaml": true,
 	}
 
 	ext := filepath.Ext(file.Filename)
