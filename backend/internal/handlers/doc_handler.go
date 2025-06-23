@@ -53,7 +53,7 @@ func (h *DocHandler) UploadDoc(c echo.Context) error {
 	defer src.Close()
 
 	// Загружаем фото в MinIO
-	objectName, err := h.docService.UploadDoc(c.Request().Context(), src, file.Size)
+	objectName, err := h.docService.UploadDoc(c.Request().Context(), src, file.Size, ext)
 	if err != nil {
 		return errorResponseWithCode(c, err, http.StatusInternalServerError)
 	}

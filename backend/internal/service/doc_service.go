@@ -22,9 +22,9 @@ func NewDocService(client *minio.Client, bucket string) *DocService {
 	}
 }
 
-func (s *DocService) UploadDoc(ctx context.Context, file io.Reader, size int64) (string, error) {
+func (s *DocService) UploadDoc(ctx context.Context, file io.Reader, size int64, ext string) (string, error) {
 	// Генерируем уникальное имя файла с правильным расширением
-	objectName := s.minioClient.PublicPrefix + "/" + uuid.New().String() + ".docx"
+	objectName := s.minioClient.PublicPrefix + "/" + uuid.New().String() + ext
 
 	opts := "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
 
