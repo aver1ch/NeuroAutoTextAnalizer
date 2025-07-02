@@ -13,6 +13,17 @@
   background-color: rgba(0, 0, 0, 0.1);
 }
 
+.docx-preview {
+  margin-top: 1rem;
+  padding: 1rem;
+  background: #f0f0f0;
+  border-radius: 8px;
+  max-height: 300px;
+  overflow-y: auto;
+  font-family: sans-serif;
+  color: #333;
+}
+
 .sidebar {
   position: fixed;
   top: 60px;
