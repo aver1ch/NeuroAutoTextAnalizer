@@ -14,6 +14,7 @@ const LoginPage = () => {
 
     if (login === 'admin' && password === '1234') {
       localStorage.setItem('auth', 'true');
+      localStorage.setItem('login', login);
       setStatus("Успешно!");
       navigate('/');
     } else if (login === '') {

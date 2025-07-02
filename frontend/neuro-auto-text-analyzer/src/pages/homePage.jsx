@@ -4,12 +4,11 @@ import '../styles/stylesOfPages/HomePage.css';
 
 const Home = () => {
   const navigate = useNavigate();
-
   const [menuOpen, setMenuOpen] = useState(false);
   const [sideBarOpen, setSideBarOpen] = useState(false);
-
   const menuRef = useRef(null);
   const sideBarRef = useRef(null);
+  const login = localStorage.getItem('login');
 
   const handleLogout = () => {
     localStorage.removeItem('auth');
@@ -62,7 +61,7 @@ const Home = () => {
 
               {menuOpen && (
                 <div className="dropdown-menu">
-                  <div className="dropdown-login">Логин: {localStorage.getItem('login')}</div>
+                  <div className="dropdown-login">Логин: {login}</div>
 
                   <button className="logout-button" onClick={handleLogout}>
                     Выйти
@@ -101,7 +100,7 @@ const Home = () => {
 
 
         <div className="home-container">
-          <h1 className="home-title">Добро пожаловать!</h1>
+          <h1 className="home-title">Добро пожаловать, {login}!</h1>
           <p className="home-subtitle">Вы успешно вошли в систему.</p>
 
           <div className="card-grid">
