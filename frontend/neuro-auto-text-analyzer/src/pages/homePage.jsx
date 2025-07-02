@@ -11,8 +11,6 @@ const Home = () => {
   const menuRef = useRef(null);
   const sideBarRef = useRef(null);
 
-  const login = localStorage.getItem('login') || 'user@example.com';
-
   const handleLogout = () => {
     localStorage.removeItem('auth');
     localStorage.removeItem('login');
@@ -33,22 +31,50 @@ const Home = () => {
   }, []);
 
   return (
+
     <div className={`home-wrapper ${sideBarOpen ? 'sidebar-open' : ''}`}>
-     
-      <div className="main-content">
-        <header className="top-bar">
-          <input
-            type="text"
-            placeholder="Поиск"
-            className="search-input"
-          />
-           <button
+    <header className="top-bar">
+      <input
+        type="text"
+        placeholder="Поиск"
+        className="search-input"
+      />
+      <button
         className="sidebar-toggle"
         onClick={() => setSideBarOpen(!sideBarOpen)}
         aria-label="Toggle sidebar"
       >
         ☰
       </button>
+
+      <div className="header-icons">
+            <span className="icon" title="Помощь">❓</span>
+
+            <div className="account-menu" ref={menuRef}>
+              <span
+                className="icon"
+                style={{ cursor: 'pointer' }}
+                onClick={() => setMenuOpen(!menuOpen)}
+                title="Аккаунт"
+              >
+                👤
+              </span>
+
+              {menuOpen && (
+                <div className="dropdown-menu">
+                  <div className="dropdown-login">Логин: {localStorage.getItem('login')}</div>
+
+                  <button className="logout-button" onClick={handleLogout}>
+                    Выйти
+                  </button>
+                </div>
+              )}
+            </div>
+          </div>
+    </header>
+
+
+      <div className="main-content">
 
       <aside className="sidebar" ref={sideBarRef}>
         <div className="menu-item">
@@ -72,30 +98,7 @@ const Home = () => {
           <span>Размер документа</span>
         </div>
       </aside>
-          <div className="header-icons">
-            <span className="icon" title="Помощь">❓</span>
 
-            <div className="account-menu" ref={menuRef}>
-              <span
-                className="icon"
-                style={{ cursor: 'pointer' }}
-                onClick={() => setMenuOpen(!menuOpen)}
-                title="Аккаунт"
-              >
-                👤
-              </span>
-
-              {menuOpen && (
-                <div className="dropdown-menu">
-                  <div className="dropdown-login">Логин: {login}</div>
-                  <button className="logout-button" onClick={handleLogout}>
-                    Выйти
-                  </button>
-                </div>
-              )}
-            </div>
-          </div>
-        </header>
 
         <div className="home-container">
           <h1 className="home-title">Добро пожаловать!</h1>
